@@ -27,3 +27,9 @@ while e >= 0:
     print("{0}{1}".format(" "*e, "*"*(2*f-1)))
     e -= 1
     f += 1
+
+g, h= 7, 0
+while g>=0:
+    print("{0}{1}{0}".format(" "*h, "*"*g))
+    g-=2
+    h+=1
