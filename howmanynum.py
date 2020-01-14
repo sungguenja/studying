@@ -1,3 +1,2 @@
-a=str(input("pls input ur num :"))
-a.split()
-print(a)
+a=int(input())
+int(i) for i in str(a)

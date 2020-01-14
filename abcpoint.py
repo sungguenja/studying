@@ -1,6 +1,6 @@
-a="ADCBBBBCABBCBDACBDCAACDDDCAABABDBCBCBDBDBDDABBAAAAAAADADBDBCBDABADCADC"
+a=str(input("pls input ur word : "))
 b=list(a)
-print(b)
+print("A is point 4. B is 3. C is 2. D is 1. and other 0")
 z=0
 x=0
 c=0

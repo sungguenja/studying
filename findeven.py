@@ -3,4 +3,4 @@ def even(x):
         return x
 
 a=int(input("we can find even num from 0 to what u input:"))
-print(list(filter(even, range(1,a))))
+print(list(filter(even, range(1,a+1))))
