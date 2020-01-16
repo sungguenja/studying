@@ -1,4 +1,4 @@
-a=str(input())
+a=str(input("input ur word"))
 b=list(map(str,a))
 b.reverse()
 c=list(map(str,b))
@@ -11,4 +11,6 @@ for i in range(0,len(b),1):
 
 if d==len(b):
     print(a)
-    print("입력하신 단어는 회문(Palindrome)입니다.")
+    print("your word is Palindrome")
+else:
+    print("your word is not palindrome")
