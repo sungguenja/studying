@@ -23,3 +23,11 @@ so that is not consideration O(n)
 ## p155_picnic
 
 when I see this problen I think it can be solved like combination
+
+not bad but not good
+
+
+## p159_boardcover
+
+well..... I want to solve this problem with recursion but python can't solve that problem because that has recursion limit
+so I read answer :crying:
