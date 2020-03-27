@@ -1,4 +1,4 @@
-# READ.ME
+# README
 
 > this folder is my record study algorithm with `Algorithmic Problem Solving Strategies` that nickname is jongmanbook in korea
 >
@@ -27,7 +27,10 @@ when I see this problen I think it can be solved like combination
 not bad but not good
 
 
+
+
 ## p159_boardcover
 
 well..... I want to solve this problem with recursion but python can't solve that problem because that has recursion limit
+
 so I read answer :crying:
