@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} 글쓰기 {% endblock %}
+
+{% block content %}
+<form action='' method='POST'>
+  {% csrf_token %}
+  {{ article.as_p }}
+  <button type='submit'>제출</button>
+</form>
+{% endblock%}

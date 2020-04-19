@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %} 가입 {% endblock %}
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ article.as_p }}
+    <button type="submit">회원가입하기</button>
+</form>
+{% endblock %}
