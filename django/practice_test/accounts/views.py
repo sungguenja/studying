@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Articles
 from .forms import ArticlesForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -58,3 +60,20 @@ def acc_make(request):
         'article': article
     }
     return render(request, 'acc_make.html', context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect('accounts:index')
+
+def login(request):
+    if request.method == 'POST':
+        user = AuthenticationForm(request,request.POST)
+        if user.is_valid():
+            auth_login(request, user.get_user())
+            return redirect('accounts:index')
+    else:
+        user = AuthenticationForm()
+    context = {
+        'user': user
+    }
+    return render(request, 'login.html', context)

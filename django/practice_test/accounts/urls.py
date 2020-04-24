@@ -7,4 +7,6 @@ urlpatterns = [
     path('<int:pk>/detail/', views.detail, name='detail'),
     path('<int:pk>/update/', views.update, name='update'),
     path('acc_make/', views.acc_make, name='acc_make'),
+    path('logout/', views.logout, name='logout'),
+    path('login/', views.login, name='login'),
 ]

@@ -3,6 +3,11 @@
 {% block title %} 메인 화면 {% endblock %}
 
 {% block content %}
+{% if user.is_active %}
+<h1>HI</h1>
+{% else %}
+<h1>pls login</h1>
+{% endif %}
 <table class="table">
   <thead>
     <tr>
