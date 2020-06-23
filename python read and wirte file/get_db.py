@@ -1,10 +1,10 @@
 import requests
 import re
 
-write_f = open('db_mivies.json','w',encoding='utf-8')
+write_f = open('db_movies.json','w',encoding='utf-8')
 data = '['
-for i in range(1,101):
-    res = requests.get().json()
+for i in range(101,301):
+    res = requests.get('https://api.themoviedb.org/3/movie/top_rated?api_key=&language=ko-KR&page='+str(i)).json()
     for ge in res['results']:
         data += '{' + '"model": "movies.movie", "pk": ' + str(ge['id']) + ', "fields": {"title": "' + ge['title'] + '", "popularity": ' + str(ge['popularity']) + ', "vote_count": ' + str(ge['vote_count']) + ', "video": '
         if ge['video'] == False:
