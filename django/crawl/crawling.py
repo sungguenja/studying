@@ -4,35 +4,24 @@ from bs4 import BeautifulSoup
 
 
 def get_html():
-    adress = 'https://api.themoviedb.org/3/search/movie?api_key='
-    res = requests.get(adress+key+'&query='+'스파이더맨 뉴 유니버스')
-    movie_id = res.json()['results'][0]['id']
-    return movie_res.json().get('posters')
+    adress = 'https://namu.wiki/w/%EB%8F%99%EB%AC%BC%EC%9D%98%20%EC%88%B2%20%EC%8B%9C%EB%A6%AC%EC%A6%88/%EB%85%B8%EB%9E%98%20%EB%AA%A9%EB%A1%9D'
 
-# def crawl(url):
-#     page = []
+    return requests.get(adress).text
 
-#     c = get_html(url)
+def crawl():
+    page = []
 
-#     soup=BeautifulSoup(c,'html.parser')
+    c = get_html()
 
-#     for tag in soup.select('table[class=wiki-table]'):
-#         if tag.text != '':
-#             page.append(tag.text + '\n')
-#         else:
-#             try:
-#                 img = tag.find('img')
-#                 page.append(img.get('src'))
-#             except AttributeError:
-#                 continue
-    
-#     return page
+    soup=BeautifulSoup(c)
 
-# now_data = crawl('')
+    for tag in soup.select('td'):
+        if tag.text != 'O':
+            page.append(tag.text + '\n')
+    return page
 
-# my_file = open('data4.txt','w', encoding='utf-8')
-# for dt in now_data:
-#     my_file.write(dt + '\n')
+now_data = crawl()
 
-# my_file.close()
-print(get_html())
+my_file = open('data5.txt','w', encoding='utf-8')
+for dt in now_data:
+    my_file.write(dt + '\n')
