@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+  <h1 style="text-align:center;">할일 등록</h1>
+  <div style="margin-top: 30px;">
+    <label for="valA" id="labA" style="margin-left: 10%; margin-top: 30px;">어떤일인가요?</label><br>
+    <input placeholder="24자까지" style="width: 80%; margin-left: 10%; font-size: 30px;" name="valA" id="valA">
+  </div>
+  <br>
+  <div style="margin-top: 30px;">
+    <label for="valB" id="labB" style="margin-left: 10%;">누가 할일인가요?</label><br>
+    <input placeholder="24자까지" style="width: 80%; margin-left: 10%; font-size: 30px;" name="valB" id="valB">
+  </div>
+  <br>
+  <div style="width: 80%; margin-left: 10%; font-size: 30px; margin-top: 30px;">
+    <label><input type="radio" name="spec" value="1" checked> 1순위</label>
+    <label><input type="radio" name="spec" value="2"> 2순위</label>
+    <label><input type="radio" name="spec" value="3"> 3순위</label>
+  </div>
+  <div style="width: 80%; margin-left: 10%; font-size: 30px; margin-top: 30px; display:flex; justify-content:space-around;">
+    <button onclick="location.href='./index.jsp'">이전</button>
+    <div>
+      <button id="submit">제출</button>
+      <button id="clear">내용지우기</button>
+    </div>
+  </div>
+</body>
+<script>
+  var title = document.getElementById("valA")
+  var who = document.getElementById("valB")
+  var spec = document.getElementsByName("spec")
+  var spec_value;
+  for(var i=0; i<spec.length; i++) {
+	  if(spec[i].checked) {spec_value = spec[i].value}
+  }
+  var clearButton = document.getElementById("clear")
+  clearButton.addEventListener("click",function() {
+	  who.value = null
+	  title.value = null
+  })
+  var submitButton = document.getElementById("submit")
+  submitButton.addEventListener("click", function() {
+	  var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() { // 요청에 대한 콜백
+		if (xhr.readyState === xhr.DONE) { // 요청이 완료되면
+	    		if (xhr.status === 200 || xhr.status === 201) {
+	      			console.log(xhr.responseText);
+	    		} else {
+	      			console.error(xhr.responseText);
+	    		}
+	  		}
+		};
+		for(var i=0; i<spec.length; i++) {
+			  if(spec[i].checked) {spec_value = spec[i].value}
+		 }
+		data = {
+			title: title.value,
+			name: who.value,
+			sequence: spec_value
+		}
+		xhr.open('POST',`http://localhost:8080/projectB/todos?title=${data.title}&name=${data.name}&sequence=${data.sequence}`)
+		xhr.send(JSON.stringify(data))
+		location.href = "http://localhost:8080/projectB/index.jsp"
+  })
+</script>
+</html>

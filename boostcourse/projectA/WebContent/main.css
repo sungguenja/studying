@@ -1,0 +1,50 @@
+@charset "EUC-KR";
+nav {
+	border: solid green;
+	border-width: 6px 6px 3px 6px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.nav-content {
+	list-style: none;
+	margin-right: 50px;
+}
+
+.nav-content > li {
+	margin: 10px 30px 10px 0px;
+	width: 100px;
+	height: 30px;
+	float: left;
+	text-align: center;
+	line-height: 30px;
+	color: white;
+	background-color: green;
+	box-shadow: 0px 0px 10px black;
+}
+
+.nav-content > li:hover {
+	cursor: pointer;
+}
+
+.nav-content > li > a {
+	display: block;
+	color: white;
+	text-decoration: none;
+}
+
+.nav-content > li > a:hover {
+	color: blue;
+}
+
+section {
+	border: solid green;
+	border-width: 3px 6px 3px 6px;
+}
+
+footer {
+	border: solid green;
+	border-width: 3px 6px 6px 6px;
+	padding: 10px;
+	text-align: center;
+}

@@ -1,0 +1,13 @@
+@charset "EUC-KR";
+
+article {
+	margin: 30px;
+	display: flex;
+}
+
+article > img {
+	border: 5px solid gray;
+	width: 500px;
+	display: inline-block;
+	margin-right: 50px;
+}
