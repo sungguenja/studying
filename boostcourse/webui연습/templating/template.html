@@ -1,0 +1,33 @@
+<html>
+    <header>
+        <style>
+            .content {
+                border: 2px solid black;
+            }
+        </style>
+    </header>
+    <body>
+        <h2>template test exmaple</h2>
+        <div class="content"></div>
+    </body>
+
+    <script id="template-list-item" type="text/template">
+        <li>
+            <h4>{title}</h4><p>{content}</p><div>{price}</div>
+        </li>
+    </script>
+
+    <script>
+        var data = [
+            {title:'hello',content:'lorem',price:2000},
+            {title:'qwe',content:'qwewqe',price:1231}
+        ]
+        var html = document.querySelector('#template-list-item').innerHTML
+        console.log(html)
+        var resultHTML = html.replace('{title}',data[0].title)
+                             .replace('{content}',data[0].content)
+                             .replace('{price}',data[0].price)
+
+        document.querySelector(".content").innerHTML = resultHTML
+    </script>
+</html>

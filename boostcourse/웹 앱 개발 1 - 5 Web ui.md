@@ -107,3 +107,98 @@ DOM Tree 분석이 끝나면 DOMContentLoaded 이벤트가 발생하며, 그 외
 그 방법이 로딩속도 성능에 유리하다고 생각하기 때문입니다.
 
 [참고자료](https://mygumi.tistory.com/281)
+
+
+
+## Event delegation
+
+`firstchild`같은 경우 그냥 택스트를 가져올 수도 있다. 그러니 `firstelementchild`를 이용하자.
+
+필요한 같은 태그들에 이벤트를 넣는 것은 for문을 돌리면 간단하게 할 수 있지만 더 좋은 방법들도 있다.
+
+```html
+<ul>
+  <li>
+    <img src="https://images-na.,,,,,/513hgbYgL._AC_SY400_.jpg" class="product-image" >    </li>
+  <li>
+    <img src="https://images-n,,,,,/41HoczB2L._AC_SY400_.jpg" class="product-image" >    </li>
+  <li>
+    <img src="https://images-na.,,,,51AEisFiL._AC_SY400_.jpg" class="product-image" >  </li>
+ <li>
+    <img src="https://images-na,,,,/51JVpV3ZL._AC_SY400_.jpg" class="product-image" >
+ </li>
+</ul>
+```
+
+```javascript
+var log = document.querySelector(".log")
+var lists = document.querySelectorAll("ul > li")
+var ul = document.querySelector("ul")
+
+for(var i=0, len=lists.length; i < list.length; i++) {
+    lists[i].addEventListener("click", function(evt) {
+        log.innerHTML = "IMG URL IS" + evt.currentTarget.firstElementChild.src
+    })
+}
+// 위함수와 아래 함수는 비슷한 상황을 발생시킬 수 있다
+ul.addEventListener("click", function(evt) {
+    // IMG, UL
+    // 즉 클릭이벤트를 전체에 넣고 target으로 진짜 이벤트가 발생한 테크만 고를수도 있다
+    // 데이터가 필요하다면 각 태그에 데이터를 저장시킨후 이벤트에서 데이터를 뽑아낼 수도 있다는 소리이다!
+    console.log(evt.target.tagName, evt.currentTarget.tagName)
+})
+```
+
+![](17.png)
+
+[이벤트 버블링 & 캡쳐링](https://javascript.info/bubbling-and-capturing)
+
+
+
+## HTML Templating
+
+```javascript
+var data = {  title : "hello",
+              content : "lorem dkfief",
+              price : 2000
+           };
+var html = "<li><h4>{title}</h4><p>{content}</p><div>{price}</div></li>";
+
+html.replace("{title}", data.title)
+    .replace("{content}", data.content)
+    .replace("{price}", data.price)
+```
+
+[라이브러리 없이 탬플레이팅 하기](https://jonsuh.com/blog/javascript-templating-without-a-library/)
+
+### 실습
+
+```html
+<script id="template-list-item" type="text/template">
+  <li>
+      <h4>{title}</h4><p>{content}</p><div>{price}</div>
+  </li>
+</script>
+<!-- 이런 식으로 탬플릿을 렌더링하지 않고 이용할 수가 있다 -->
+```
+
+```javascript
+var data = [
+        {title : "hello",content : "lorem dkfief",price : 2000},
+        {title : "hello",content : "lorem dkfief",price : 2000}
+];
+
+//html 에 script에서 가져온 html template.
+var html = document.querySelector("#template-list-item").innerHTML;
+
+var resultHTML = "";
+
+for(var i=0; i<data.length; i++) {
+    resultHTML += html.replace("{title}", data[i].title)
+                      .replace("{content}", data[i].content)
+                      .replace("{price}", data[i].price);
+}
+
+document.querySelector(".content").innerHTML = resultHTML;
+```
+
