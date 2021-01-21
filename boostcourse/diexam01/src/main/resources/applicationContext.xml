@@ -4,5 +4,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="userBean" class="kr.or.connect.diexam01.UserBean"></bean>
+	
+	<bean id="e" class="kr.or.connect.diexam01.Engine"></bean>
+	<bean id="c" class="kr.or.connect.diexam01.Car">
+		<property name="engine" ref="e"></property> <!-- 이렇게 bean태그 안에서 하면 getter setter를 이용하면서 위에 e를 참고할 수가 있다 -->
+		<!-- 즉, engine이라서 setEngine을 실행시키는데 함수 인자로 e에 해당하는 것을 넣어준다 -->
+		<!-- 다음과 같은 의미라고 생각해도 괜찮다
+		Engine e = new Engine();
+		Car c = new Car();
+		c.setEngine(e); -->
+	</bean>
 
 </beans>
