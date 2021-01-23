@@ -131,3 +131,33 @@ this.jdbcTemplate.update("delete from actor where id = ?", Long.valueOf(actorId)
 - SimpleJdbcInsert
   - 테이블에 쉽게 데이터 insert 기능을 제공
   - [SimpleJdbcInsert 예제](https://www.tutorialspoint.com/springjdbc/springjdbc_simplejdbcinsert.htm)
+
+## DAO DTO
+
+[참고자료 1 db 커넥션](https://ejbvn.wordpress.com/category/week-2-entity-beans-and-message-driven-beans/day-09-using-jdbc-to-connect-to-a-database/)
+
+[참고자료 2 DAO 패턴](https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm)
+
+- DTO
+  - data tramsfer object의 약자이다
+  - 계층간 데이터 교환을 위한 자바빈즈이다
+  - 여기서의 계층이란 컨트롤러 뷰, 비지니스 계층, 퍼시스턴스 계층을 의미한다
+  - 보통 로직이 없고 순수한 데이터 객체이다!
+- DAO
+  - Data Access Object의 약자로 데이터를 조회하거나 조작하는 기능을 전담하도록 만든 객체이다
+  - 보통 데이터베이스를 조작하는 기능을 전담하는 목적으로 만들어진다.
+- ConnectionPool
+  - DB연결은 비용이 많이 든다
+  - 커넥션 풀은 미리 커넥션을 여러 개 맺어 둔다.
+  - 커넥션이 필요하면 커넥션 풀에게 빌려서 사용한 후 반납한다.
+  - 커넥션을 반납하지 않으면 어떻게 될까?
+    - 커넥션 풀에서 사용가능한 커넥션이 없어져 반응이 늦어지거나 에러가 유발될 수 있다
+  - ![](19.jpg)
+- DataSource란?
+  - DataSource는 커넥션 풀을 관리하는 목적으로 사용되는 객체이다.
+  - DataSource를 이용해 커넥션을 얻어오고 반납하는 등의 작업을 수행한다.
+  - close메소드로 반납한다.
+- 실습 예제
+  - ![](20.png) 
+  - 위와 같은 구성을 만들려고 한다.
+  - 코드를 보면서 참고하면 될 거 같다. 언제나 이 흐름구조를 생각하고 코드를 짜면 편할 것이다.
