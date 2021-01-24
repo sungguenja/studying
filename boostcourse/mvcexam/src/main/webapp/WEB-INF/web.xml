@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+version="3.1">
+
+  <display-name>Spring JavaConfig Sample</display-name>
+
+  <servlet>
+    <servlet-name>mvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextClass</param-name>
+      <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </init-param>
+    <!-- 아래 init param은 해당 java파일을 찾아간다 -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>kr.or.connect.mvcexam.config.WebMvcContextConfiguration</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>mvc</servlet-name>
+    <url-pattern>/</url-pattern>
+    <!-- /때문에 모든 요청이 해당 서블릿 네임(여기서는 mvc)로 처리된다.
+    mvc위를 보면 설정을 알 수가 있다. -->
+  </servlet-mapping>
+
+
+</web-app>

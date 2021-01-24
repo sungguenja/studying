@@ -172,3 +172,183 @@
 - 요청 처리 종료
 
   - ![](32.png)
+
+## 작성실습
+
+[참고 자료 스프링 문서](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html)
+
+서버 404에러가 pom.xml에 공백이 없어서 일어나는 경우도 있다. 간격 잘 맞춰주자
+
+1. 웹 브라우저에서 `http://localhost:8080/mvcexam/plusform`이라고 요청을 보내면 서버는 웹 브라우저에게 2개의 값을 입력받을 수 있는 입력창과 버튼이 있는 화면을 출력한다
+2. 웹 브라우정에 2개의 값을 입력하고 버튼을 클릭하면 `https://localhost:8080/mvcexam/plusURL`로 2개의 입력값이 POST방식으로 서버에게 전달한다. 서버는 2개의 값을 더한 후, 그 결과 값을 JSP에게 request scope으로 전달하여 출력한다.
+
+### DispatcherServlet을 FrontController로 설정하기
+
+- 설정안하면 프론트 컨트롤러의 역할을 하지 못한다
+- web.xml 파일에 설정 (자주 사용)
+- javax.servlet.ServletContainerInitializer 사용
+  - 서블릿 3.0 스펙 이상에서 web.xml 파일을 대신해서 사용할 수 있다
+- org.springframework.web.WebApplicationInitallizer 인터페이스를 구현해서 사용 (자주 사용)
+
+**web.xml파일에서 설정하기**
+
+- xml spring 설정 읽어들이도록 DispatcherServlet설정
+  - ![](webxml 설정 읽어들이기.png)
+- Java config spring 설정 읽어들이도록 DispatcherServlet설정 (수업에서는 이 방법 사용)
+  - ![](java config spring 설정 읽어들이기.png)
+  - url-pattern에서 보면 `/`로 설정되어 있다. 모든 요청을 여기서 처리하게 되는 것으로 설정하는 것
+
+**WebApplicationInitializer를 구현해서 설정하기**
+
+- Spring MVC는 ServletContainerInitializer를 구현하고 있는 SpringServletContainerInitializer를 제공한다
+- SpringServletContainerInitializer는 WebApplicationInitializer구현체를 찾아 인스턴스를 만드록 해당 인스턴스의 onStartup메소드를 호출하여 초기화 한다.
+- 단점
+  - 처음 웹 어플리케이션이 구동되는 시간이 오래 걸릴 수도 있다 <- 구현체를 찾고 초기화를 하기 때문에 발생하는 단점이다
+- 구현 방법
+  - ![](WebApplicationInitalizer를 구현해서 설정.png)
+
+**Spring MVC** 설정
+
+- kr.or.connect.webmvc.config.WebMvcContextConfiguration
+
+  - ![](springmvc.png)
+
+  - @Configuration
+
+    - org.springframework.context.annotation의 Configuration 애노테이션과 Bean 애노테이션 코드를 이용하여 스프링 컨테이너에 새로운 빈 객체를 제공할 수 있다.
+
+  - @EnableWebMvc
+
+    - DispatcherServlet의 RequestMappingHandlerMapping, RequestMappingHandlerAdapter, ExceptionHandlerExceptionResolver, MessageConverter 등 Web에 필요한 빈들을 대부분 자동으로 설정해준다
+    - xml로 설정의 `<mvc:annotation-driven/>`와 동일하다
+    - 기본 설정 이외의 설정이 필요하다면 WebMvcConfigrereAdapter를 상속받도록 Java config class를 작성한 후, 필요한 메소드를 오버라이딩 하도록 한다
+    - ![](enable.png)
+    - [위 코드 깃헙](https://github.com/spring-projects/spring-framework/blob/master/spring-webmvc/src/main/java/org/springframework/web/servlet/config/annotation/WebMvcConfigurationSupport.java)
+
+  - @ComponentScan
+
+    - ComponentScan애노테이션을 이용하면 Controller, Service, Repository, Component애노테이션이 붙은 클래스를 찾아 스프링 컨테이너가 관리하게 된다.
+    - DefaultAnnotaionHandlerMapping과 RequestMappingHandlerMapping구현체는 다른 핸드러 매핑보다 훨씬 더 정교한 작업을 수행한다. 이 두 개의 구현체는 애노테이션을 사용해 매핑 관계를 찾는 매우 강력한 기능을 가지고 있다. 이들 구현체는 스프링 컨테이너 즉 애플리케이션 컨텍스트에 있는 요청 처리빈에서 ReqiestMapping애노테이션을 클래스나 메소드에서 찾아 HandlerMapping객체를 생성하게 된다.
+      - HandlerMapping은 서버로 들어온 요청을 어느 핸들러로 전달할지 결정하는 역할을 수행한다.
+    - DefaultAnnotationHandlerMapping은 DispatcherServlet이 기본으로 등록하는 기본 핸들러 맵핑 객체이고, RequestMappingHandlerMapping은 더 강력하고 유연하지만 사용하려면 명시적으로 설정해야 한다.
+
+  - WebMvcConfigurerAdapter
+
+    - org.springframework.web.servlet.config.annotation. WebMvcConfigurerAdapter
+    - @EnableWebMvc 를 이용하면 기본적인 설정이 모두 자동으로 되지만, 기본 설정 이외의 설정이 필요할 경우 해당 클래스를 상속 받은 후, 메소드를 오버라이딩 하여 구현한다.
+
+  - Controller(Handler) 클래스 작성하기
+
+    - @Controller 애노테이션을 클래스 위에 붙인다.
+    - 맵핑을 위해 @RequestMapping 애노테이션을 클래스나 메소드에서 사용한다.
+
+  - @RequestMapping
+
+    - Http 요청과 이를 다루기 위한 Controller 의 메소드를 연결하는 어노테이션
+    - Http Method 와 연결하는 방법
+       \- @RequestMapping(value="/users", method=RequestMethod.POST)
+       \- From Spring 4.3 version (@GetMapping, @PostMapping, @PutMapping, @DeleteMapping, @PatchMapping)
+    - Http 특정 해더와 연결하는 방법
+       \- @RequestMapping(method = RequestMethod.GET, headers = "content-type=application/json")
+    - Http Parameter 와 연결하는 방법
+       \- @RequestMapping(method = RequestMethod.GET, params = "type=raw")
+    - Content-Type Header 와 연결하는 방법
+       \- @RequestMapping(method = RequestMethod.GET, consumes = "application/json")
+    - Accept Header 와 연결하는 방법
+       \- @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+
+    
+
+  - **Spring MVC가 지원하는 Controller메소드 인수 타입**
+
+    - javax.servlet.ServletRequest
+    - **javax.servlet.http.HttpServletRequest**
+    - org.springframework.web.multipart.MultipartRequest
+    - org.springframework.web.multipart.MultipartHttpServletRequest
+    - javax.servlet.ServletResponse
+    - **javax.servlet.http.HttpServletResponse**
+    - **javax.servlet.http.HttpSession**
+    - org.springframework.web.context.request.WebRequest
+    - org.springframework.web.context.request.NativeWebRequest
+    - java.util.Locale
+    - java.io.InputStream
+    - java.io.Reader
+    - java.io.OutputStream
+    - java.io.Writer
+    - javax.security.Principal
+    - java.util.Map
+    - org.springframework.ui.Model
+    - org.springframework.ui.ModelMap
+    - **org.springframework.web.multipart.MultipartFile**
+    - javax.servlet.http.Part
+    - org.springframework.web.servlet.mvc.support.RedirectAttributes
+    - org.springframework.validation.Errors
+    - org.springframework.validation.BindingResult
+    - org.springframework.web.bind.support.SessionStatus
+    - org.springframework.web.util.UriComponentsBuilder
+    - org.springframework.http.HttpEntity<?>
+    - Command 또는 Form 객체
+
+     
+
+    **Spring MVC가 지원하는 메소드 인수 애노테이션**
+
+    - **@RequestParam**
+    - **@RequestHeader**
+    - **@RequestBody**
+    - @RequestPart
+    - **@ModelAttribute**
+    - **@PathVariable**
+    - @CookieValue
+
+     
+
+    **@RequestParam**
+
+    - Mapping된 메소드의 Argument에 붙일 수 있는 어노테이션
+    - @RequestParam의 name에는 http parameter의 name과 멥핑
+    - @RequestParam의 required는 필수인지 아닌지 판단
+
+     
+
+    **@PathVariable**
+
+    - @RequestMapping의 path에 변수명을 입력받기 위한 place holder가 필요함
+    - place holder의 이름과 PathVariable의 name 값과 같으면 mapping 됨
+    - required 속성은 default true 임
+
+     
+
+    **@RequestHeader**
+
+    - 요청 정보의 헤더 정보를 읽어들 일 때 사용
+    - @RequestHeader(name="헤더명") String 변수명
+
+     
+
+    **Spring MVC가 지원하는 메소드 리턴 값**
+
+    - **org.springframework.web.servlet.ModelAndView**
+    - org.springframework.ui.Model
+    - java.util.Map
+    - org.springframework.ui.ModelMap
+    - org.springframework.web.servlet.View
+    - **java.lang.String**
+    - java.lang.Void
+    - org.springframework.http.HttpEntity<?>
+    - org.springframework.http.ResponseEntity<?>
+    - **기타 리턴 타입**
+
+## 실습 2
+
+1. http://localhost:8080/mvcexam/userform 으로 요청을 보내면 이름, email, 나이를 물어보는 폼이 보여진다.
+2. 폼에서 값을 입력하고 확인을 누르면 post방식으로 http://localhost:8080/mvcexam/regist 에 정보를 전달하게 된다.
+3. regist에서는 입력받은 결과를 콘솔 화면에 출력한다.
+
+## 실습3
+
+1. http://localhost:8080/mvcexam/goods/{id} 으로 요청을 보낸다.
+2. 서버는 id를 콘솔에 출력하고, 사용자의 브라우저 정보를 콘솔에 출력한다.
+3. 서버는 HttpServletRequest를 이용해서 사용자가 요청한 PATH정보를 콘솔에 출력한다.
+
+mvcexam참고하면 된다!
