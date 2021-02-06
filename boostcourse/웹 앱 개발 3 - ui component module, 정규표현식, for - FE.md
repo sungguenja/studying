@@ -233,3 +233,64 @@ console.log(result);
 - action: 보내는 주소
 - method: 보내는 메소드
 - input에서 name속성 json형태를 생각하면 키값이라고 생각하면 편안
+
+검증은 어떻게 처리할까? 보내서 백엔드에서 처리하는것은 서버가 괜한일을 처리하는 것이다. 하지만 프론트에서는 버튼을 누르거나 엔터를 누르면 자동으로 요청을 보내게 되는데 어떻게 해결해야 하지?
+
+## preventDefault()
+
+이것을 이용하자. form태그에 관련해서 submit이 일어나서 요청을 보내는 행동에 디폴트를 초기화시키는 방법이다.
+
+이것을 이용하면 submit이 발생되도 바로 데이터를 보내지 않는다. 아래와 같은 예를 확인하자
+
+```html
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> Join !</title>
+        <link rel="stylesheet" href="/css/ui.css">
+    </head>
+    <body>
+        <h1>Join my website!</h1>
+        <div class="formWrap">
+            <form action="/join" method="post" id="myform">
+                <div class="inputWrap">
+                    <div class="email">
+                        <span> Email </span> <input type="text" name="email"><br/>
+                    </div>
+                    <div class="password">
+                        <span> Password </span> <input type="password" name="password"><br/>
+                    </div>
+                </div>
+                <input class="sendbtn" type="submit">
+           </form>
+        </div>
+
+        <section class="result"></section>
+        <script>
+		var btn = document.querySelector(".sendbtn");
+		var result = document.querySelector(".result");
+		btn.addEventListener("click", function(evt) {
+		    evt.preventDefault();
+		    var emailValue = document.querySelector("[name='email']").value;
+		    var bValid = (/^[\w+_]\w+@\w+\.\w+$/).test(emailValue);
+		    if(!bValid)  { 
+  		      result.innerHTML = "올바르지 않은 이메일입니다";
+		    } else {
+        		result.innerHTML = "이메일정보가 좋아요~";
+        		document.querySelector("#myform").submit();
+ 		   }
+		});
+        </script>
+    </body>
+</html>
+```
+
+위코드는 버튼 클릭에 대해서 만든 것이니 form태그에 대해서 `addEventListener`를 이용해서 submit 이벤트를 만들어주면 될 것 같다!
+
+[회원 정보 관련 정규 표현식](https://epthffh.tistory.com/entry/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8-%EC%A0%95%EA%B7%9C%EC%8B%9D)
+
+[input자체에 패턴을 주는 방법](https://www.w3schools.com/tags/att_input_pattern.asp)
+
