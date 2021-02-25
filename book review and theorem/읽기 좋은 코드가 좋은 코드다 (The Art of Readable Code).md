@@ -148,3 +148,48 @@ Node* FindNodeInSubtree(Node* subtree, string name, int depth);
 1. 나올 것 같은 질문 예측하기
 2. 큰 그림에 대한 주석
 
+명확하고 간결한 주석은 중요하다. 다음과 같은 경우를 보자
+
+```c++
+// int는 CategoryType이다.
+// 내부 페어의 첫 번째 float는 'score'다.
+// 두 번째는 'weight'다.
+typedef hash_map<int, pair<float,float> > ScoreMap;
+```
+
+위와 같이 굳이 주석에 세줄이나 이용할 필요가 없다. 읽기 귀찮아지기 까지 하니 다음과 같이 간단하게 나타내는 것이 최적이라고 생각한다.
+
+```c++
+// CategoryType -> (score, weight)
+typedef hash_map<int, pair<float,float> > ScoreMap;
+```
+
+위와 같이 하는것은 좋은 아이디어이다.
+
+모호한 대명사는 피하는 것이 좋다. 1루수가 누구야를 생각해봐라. 대명사로 인해 괜히 햇갈리는 상황이 오니 대명사는 피하고 명확하게 표현하는 것이 최대한 좋다. 또한 엉터리 문장도 정리해라. 그리고 함수의 동작을 명확하게 설명하는 것이 좋다. 어떠한 원리로 작동하는지 그것을 명확하게 하는 것이 좋다. `이 파일에 담긴 줄 수를 반환 한다` **VS** `파일 안에 새 줄을 나타내는 바이트('\n')가 몇개있는지 센다` 어떤 것이 더 명확한지 생각해보도록
+
+코너케이스를 설명해주는 입/출력 예를 사용하라
+
+함수를 사용할 때 변수에 대해 확정적으로 써주는 것이 조금 좋다. 근데 이것은 파이썬에서만 가능하다 다음과 같은 코드를 보자
+
+```python
+def Connect(timeout,use_encryption):
+    .....
+    
+Connect(timeout=10,use_encryption=False)
+```
+
+파이썬은 이런 방식이 가능한데 다른 언어는 불가능하다! 그런데 이게 되게 명확해서 좋아보인다! 어떻게 이용할 수가 있을까? 주석의 힘이 있다 다음과 같이 사용해보자
+
+```java
+void Connect(int timeout, bool use_encryption) {
+    ....
+}
+
+Connect(/* timeout = */ 10, /* use_encryption = */ false);
+```
+
+
+
+## 2. 루프와 논리를 단순화하기
+
