@@ -203,3 +203,57 @@ if/else의 경우에는 부정을 앞에 오게 할지 긍정을 앞에 오게 �
 1. 부정이 아닌 긍정을 다루어라. 즉, `if(!false)` 보단 `if(true)`를 선호하자
 2. 간단한 것을 먼저 처리하라. 이렇게 하면 동시에 같은 화면에 if와 else 구문을 나타낼 수도 있다. 두 개의 주문을 동시에 보는 게 좋다
 3. 더 흥미롭고, 확실한 것을 다루어라
+
+if안에는 메소드를 넣지 마라 다음 코드에서 위에보다 아래가 더 직관적인 것을 알 수 있다. 
+
+```python
+if request.user.id == document.owner_id:
+    .....
+
+user_id = request.user.id
+if user_id == document.owner_id:
+    .....
+
+# 3번째 코드 처럼 직관성이 더 좋다면 아래와 같이 진행해도 괜찮다
+user_owns_document = request.user.id == document.owner_id
+if user_owns_document:
+    ....
+```
+
+[드모르간의 법칙](https://ko.wikipedia.org/wiki/%EB%93%9C_%EB%AA%A8%EB%A5%B4%EA%B0%84%EC%9D%98_%EB%B2%95%EC%B9%99)을 이용하는 것도 아주 좋은 방안이다
+
+자주 사용되는 문자열은 변수로 등록해두는 것이 좋다 아래코드에서 윗단락보단 아래 단락이 더 읽기 편하다는 것을 직관적으로 알 수 있다
+
+```javascript
+var update_highlight = function (message_num) {
+    if ($("#vote_value" + message_num).html() === "Up") {
+        $("#thumbs_up" + message_num).addClass("highlighted");
+        $("#thumbs_down" + message_num).removeClass("highlighted");
+    } else if ($("#vote_value" + message_num).html() === "Down") {
+        $("#thumbs_up" + message_num).removeClass("highlighted");
+        $("#thumbs_down" + message_num).addClass("highlighted");
+    } else {
+        $("#thumbs_up" + message_num).removeClass("highlighted");
+        $("#thumbs_down" + message_num).removeClass("highlighted");
+    }
+}
+
+var update_highlight = function (message_num) {
+    var thumbs_up = $("#thumbs_up" + message_num)
+    var thumbs_down = $("#thumbs_down" + message_num)
+    var vote_value = $("#vote_value" + message_num).html()
+    var hi = "highlighted"
+    
+    if (vote_value === "Up") {
+        thumbs_up.addClass("highlighted");
+        thumbs_down.removeClass("highlighted");
+    } else if (vote_value === "Down") {
+        thumbs_up.removeClass("highlighted");
+        thumbs_down.addClass("highlighted");
+    } else {
+        thumbs_up.removeClass("highlighted");
+        thumbs_down.removeClass("highlighted");
+    }
+}
+```
+
