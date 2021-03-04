@@ -2,7 +2,7 @@
 
 ## Pls don't try this at home
 
-this noob's studying level is so Fxxx.
+this noob's studying level is so low
 
 So it can attack ur eye
 
