@@ -116,3 +116,21 @@ Button myButtons[] = {new Button(),new Button(),new Button()};
 
 ### C#
 
+특이하게 `foo[2][3]`으로 접근도 가능하지만 `foo[2,3]`으로 접근 가능한 객체 다차원 배열도 지원한다.
+
+## JavaScript
+
+자바스크립트의 배열은 동적이고 자동으로 크기 조절이 된다.
+
+```javascript
+Array cities = new Array();
+cities[0] = "qwe"
+cities[1] = "zzd" // 이렇게 하면ㄴ 길이가 2가 됨...
+```
+
+길이 조절로 삭제도 바로 가능하다
+
+```javascript
+cities.length = 1 // 'zzd'가 사라짐
+```
+
