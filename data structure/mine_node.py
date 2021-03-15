@@ -14,3 +14,10 @@ class TNode:
         self.data = elem
         self.left = left
         self.right = right
+
+class BSTNode:
+    def __init__(self,key,value,left=None,right=None):
+        self.key = key
+        self.value = value
+        self.left = left
+        self.right = right
