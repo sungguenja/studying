@@ -33,7 +33,7 @@ public class Logger {
     }
 
     // 싱글톤 인스턴스 리턴
-    public static Logger getInstance() {
+    public synchronized static Logger getInstance() {
         if (instance == null) {
             instance = new Logger();
         }
