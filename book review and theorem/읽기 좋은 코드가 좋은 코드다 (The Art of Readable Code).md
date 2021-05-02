@@ -257,3 +257,86 @@ var update_highlight = function (message_num) {
 }
 ```
 
+값을 한 번만 할당하는 변수를 선호하라
+
+무슨 말이냐. 값이 변하지 않는 **상수**들을 지정해두라는 소리이다. 아래와 같이
+
+```java
+static const int NUM_THREADS = 10;
+```
+
+첫째로 코드를 읽는 사람은 상수 이름으로 이 코드를 쉽게 이해할 수가 있다. 두번째로 해당 값이 들어간 모든 값을 수정해야할 때 이렇게 지정을 해두면 우리는 저 코드만 수정을 하면 되는 것이다.
+
+- 종합적으로 정리해보자
+
+  ```html
+  <input type="text" id="input1" value="Dustin">
+  <input type="text" id="input2" value="Trevor">
+  <input type="text" id="input3">
+  <input type="text" id="input4" value="Melissa">
+  ```
+
+  우리는 여기서 이제 함수를 만들어보자. 함수는 변경된 DOM요소를 또는 비어있는 unoyt이 없으면 null을 반환하도록 하자. 그러면 무지성 코드는 다음과 같을 수가 있을 것이다.
+
+  ```javascript
+  var setFirstEmptyInput = function (new_value) {
+      var found = false;
+      var i = 1;
+      var elem = document.getElementById('intput' + i);
+      while (elem != null) {
+          if (elem.value === '') {
+              found = true;
+              break;
+          }
+          i++;
+          elem = document.getElementById('input'+i);
+      }
+      if (found) {elem.value = new_value;}
+      return elem;
+  }
+  ```
+
+  위 코드는 수행은 하지만 보기 좋지가 않다. `found`,`i`,`elem` 이것들이 계속해서 변경되며 혼란스럽게 만든다. 거기다 함수라면 굳이 break를 이용하지 않고 바로 끝낼 수가 있다. 그렇다면 일단 이 부분부터 수정해보도록 하자.
+
+  ```javascript
+  var setFirstEmptyInput = function (new_value) {
+      var i = 1;
+      var elem = document.getElementById('intput' + i);
+      while (elem != null) {
+          if (elem.value === '') {
+              elem.value = new_value;
+              return elem;
+          }
+          i++;
+          elem = document.getElementById('input'+i);
+      }
+      return null;
+  }
+  ```
+
+  함수가 끝나는 경우에 바로 끝낼 수 있게 해줘서 햇갈리지 않고 꽤 괜찮다. 하지만 while은 우리의 코드를 조금 햇갈리게 하는 감이 있다. 보통은 while문보다는 for문이 조금 더 가독성이 좋다 그러니 다음과 같이 수정해보도록 하자
+
+  ```javascript
+  var setFirestEmptyInput = function (new_value) {
+      for (var i = 0; true; i++) {
+          var elem = document.getElementById('intput' + i);
+          if (elem === null) {
+              return null;
+          }
+          
+          if (elem.value === '') {
+              elem.value = new_value;
+              return elem;
+          }
+      }
+  }
+  ```
+
+  코드도 압축이 되고 가독성도 더 좋아졌다고 볼 수가 있다. 어떠한 조건에서 어떤 값이 필요한지 한눈에 들어오기 때문에 매우 편해졌다! 주석까지 더 적절히 단다면 거의 완벽하다고 할 수가 있을 것이다!
+
+요약 해보자
+
+1. 방해되는 **변수를 제거**하라. 결과를 즉시 처리하는 방식으로 '증간 결과값'을 저장하는 변수를 제거하는 몇 가지 예를 살펴보았다.
+2. **각 변수의 범위를 최대한 작게 줄여라** 각 변수의 위치를 옮겨서 변수가 나타나는 줄의 수를 최소화하라. 눈에 보이지 않으면 마음에서 멀어지는 버이다.
+3. **값이 한 번만 할당되는 변수를 선호하라** 값이 한 번만 할당되는 변수는 훨씬 이해하기 쉽다.
+
