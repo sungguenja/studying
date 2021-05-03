@@ -340,3 +340,61 @@ static const int NUM_THREADS = 10;
 2. **각 변수의 범위를 최대한 작게 줄여라** 각 변수의 위치를 옮겨서 변수가 나타나는 줄의 수를 최소화하라. 눈에 보이지 않으면 마음에서 멀어지는 버이다.
 3. **값이 한 번만 할당되는 변수를 선호하라** 값이 한 번만 할당되는 변수는 훨씬 이해하기 쉽다.
 
+## 3. 코드 재작성하기
+
+상관이 없는 하위문제는 적극적으로 추출해야 한다. 큰 흐름과 관계가 적은 하위문제를 해결하는 코드는 코드의 가독성을 떨어뜨린다.
+
+1. 주어진 함수나 코드 블록을 보고, 스스로에게 질문하라 "상위수준에서 보 이 코드의 목적은 무엇이가?"
+2. 코드의 모든 줄에 질문을 더져라 "이 코드는 직접적으로 목적을 위해서 존재하는가? 혹은 목적을 위해서 필요하긴 하지만 목적 자체와 직접적으로 상관없는 하위문제를 해결하는가?"
+3. 만약 상당히 원래의 목적과 직접적으로 관련되지 않은 하위무제를 해결하느 코드 분량이 많으면, 이를 추출해서 별도의 함수로 만든다
+
+다음과 같은 예를 보자
+
+```python
+def findClosesteLocation(lat,lng,array):
+    closest_dist = sys.maxsize
+    closest = -1
+    for i in range(len(array)):
+        lat_rad = lat
+        lng_rad = lng
+        lat2_rad = array[i].latitude
+        lng2_rad = array[i].longitude
+        dis = cos(sin(lat_rad)*sin(lat2_rad)+cos(lat_rad)*cos(lat2_rad)*cos(lng2_rad-lng_rad))
+        if dist < closest_dist:
+            closest_dists = dist
+            closest = arraay[i]
+            
+    return closest
+```
+
+위 코드는 가장 가까운 거리를 구하는 역할을 하긴 할 것이다. 그런데 for문에서 하는 거리를 구하는 것은 직접적으로 목적을 위해 존재하는 것은 안니다 즉, 해당 부분은 따로 함수로 추출하는 것이 더 가독성이 좋을것이다!
+
+한 번에 하나씩 처리하는 코드도 중요하다
+
+한번에 여러가지 일을 처리하는 함수는 이해하기가 어렵다 코테를 진행해보면 많이 경험해봤을 것이다. 예를 들어 추천 반대 시스템을 만든다고 해보자. 그러면 우리는 경우가 의외로 다양하다는 것을 깨달을 것이다. 전의 추천이 찬,반,무 그리고 지금 추천이 찬,반,무인지 대충 생각해도 9개의 경우가 나온다
+
+하지만 약간 뒤집어서 생각하자. 옛 추천과 지금 추천으 수치값으로 해석되고 점수가 변경된다. 그렇다면 추천수를 보여주는 시스템은 복잡하게 하지 않고 함수를 보여주면 될 것이다.
+
+```javascript
+var vote_value = function (vote) {
+    if (vote === 'Up') {
+        return +1;
+    }
+    if (vote === 'Down') {
+        return -1;
+    }
+    return 0;
+}
+
+var vote_changed = function (old_vote,new_vote) {
+    var score = get_score();
+    
+    score -= vote_value(old_vote); // 옛 점수 제거
+    socre += vote_value(new_vote); // 새 점수 더함
+    
+    set_score(score);
+}
+```
+
+매우 간단하게 된다!
+
