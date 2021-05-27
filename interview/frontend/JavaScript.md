@@ -171,6 +171,30 @@
 
    근데 코드를 보면 조금 신기하다. makeFunc가 실행되고 나면 name변수에 더 접근할 수 없게 될 것으로 예상하는게 일반적인데 myFunc의 경우 잘 접근한다. 리턴하는 함수가 클로저를 생성하기 때문이다.
 
+   닳고 닳은 예제를 하나 보자
+
+   ```javascript
+   for(var i=0;i<10;i++){
+       setTimeout(console.log(i),1000);
+   }
+   ```
+
+   위코드가 대충 보면 간단하게 0~9까지 나올 것 같다. 그런데 10만 나온다! console.log()가 이미 10되버린 `i`를 참고해서 10만 인쇄하게 된다. 그래서 closer을 이용해 원하는 것을 할 수가 있다
+
+   ```javascript
+   for(var i=0;i<10;i++){
+       (function(j) {
+           setTimeout(function() {
+               console.log(j);
+           },1000)
+       })(i);
+   }
+   ```
+
+   이렇게 하면 setTimeout을 포함한 함수가 내부에서 j를 보고 있기 때문에 setTimeout이 각각 들어간 i가 함수내에서 j를 보기때문에 j를 참고한다. 그래서 0~9를 인쇄하게 된다. 함수 내부만을 참고하게 하는 것이 클로저이다.
+
+   클로저의 문제는 메모리에 계속 남아있다는 것이 있다. 그러니 안쓰는 경우에는 `null`을 이용해서 메모리를 초기화 하는 것이 중요하다.
+
 7. foreach vs map
 
    - forEach
@@ -425,7 +449,7 @@
 
 21. let,var,const
 
-    var은 호이스팅이 된다는 가장 큰 특징이 있다. 그래서 if문을 작성시 편하게 변수를 생성할 수도 있다.
+    var은 호이스팅이 된다는 가장 큰 특징이 있다. 그래서 if문을 작성시 편하게 변수를 생성할 수도 있다. 그리고 var는 function scoped
 
     ```javascript
     if (true) {
@@ -442,7 +466,7 @@
 
     그리고 var는 재선언해도 에러가 일어나지 않지만 let,const는 에러를 반환한다.
 
-    let은 mutable하지만 const는 immutable
+    let은 mutable하지만 const는 immutable. 그리고 이 둘은 block scope이다. 위 코드를 생각하면 쉽다. let과 const가 if밖에서는 에러가 난다
 
 22. 화살표 함수
 
@@ -498,6 +522,25 @@
     
     console.log(name); // 'ellie'
     console.log(age); // 25
+    ```
+
+24. 멀티 스레드 구현
+
+    web worker을 이용하면 된다. 지원하는 브라우저인지 체크를 해도 되고 직접 있을 경우 없을 경우 나눠도 괜찮다
+
+    ```javascript
+    var w;
+    
+    function startWorker() {
+        if(window.Worker) {
+            w = new Worker('가져올 js 파일');
+            w.onmessage = function(event) {
+                alert(event.data); // 다른 로직을 진행해도 괜찮다
+            };
+        } else {
+            alert('Web Worker을 지원하지 않는 브라우저입니다.');
+        }
+    }
     ```
 
     
