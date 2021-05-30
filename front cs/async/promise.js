@@ -23,16 +23,25 @@ promise.then((value) => {
 
 const fetch_number = new Promise((resolve,reject) => {
     setTimeout(() => {
-        resolve(1)
+        resolve(3)
     },1000);
 })
 
 fetch_number
-.then(num => num*2)
-.then(num => num*3)
+.then((num )=> {
+    console.log(num)
+    return num*2
+})
+.then((num) => {
+    console.log(num)
+    return num*3
+})
 .then(num => {
     return new Promise((resolve,reject) => {
-        setTimeout(() => resolve(num-1))
-    },1000);
+        console.log(num)
+        setTimeout(() => {
+            resolve(num-1)
+        },1000)
+    });
 })
 .then(num => console.log(num));
