@@ -45,3 +45,5 @@ fetch_number
     });
 })
 .then(num => console.log(num));
+
+console.log(fetch_number.then)
