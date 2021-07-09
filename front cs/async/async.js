@@ -41,3 +41,16 @@ getApple()
 .then((result) => {console.log(result)})
 
 pickAllFruits().then((result) => {console.log(result)})
+
+async function test() {
+    return 'test';
+}
+
+test().then((result) => {console.log(result + result)})
+
+const asdf = new Promise((resolve,reject) => {
+    resolve("good");
+    reject("not good");
+})
+
+asdf.then((result) => {console.log(result)})
