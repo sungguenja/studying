@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Toggle practice</title>
+<style>
+.btn-tgl { width: 110px; height: 40px; background: #333; color: #fdf5d3; border: none; font-size: 20px; }
+.txt { display: none; position: relative; width: 300px; padding: 10px; background: #fdf5d3; text-align: center; -webkit-box-shadow: 0 10px 21px -2px rgba(50,51,42,0.2); box-shadow: 0 10px 21px -2px rgba(50,51,42,0.2); }
+.txt.show { display: block; }
+.txt:after { content: ''; position: absolute; top: -10px; left: 43px; display: block; width: 20px; height: 20px; background: #fdf5d3; transform: rotate(45deg); -webkit-transform: rotate(45deg); }
+</style>
+</head>
+<body>
+<button type="button" class="btn-tgl">Toggle</button>
+<p class="txt">
+hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello. hello.
+</p>
+<script src="btnClosure.js"></script>
+</body>
+</html>
