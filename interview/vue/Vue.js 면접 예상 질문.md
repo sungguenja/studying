@@ -1,5 +1,7 @@
 # Vue.js 면접 예상 질문
 
+[참고 깃허브](https://github.com/sudheerj/vuejs-interview-questions-korean/blob/master/README.md#VueJS%EC%9D%98-%EB%9D%BC%EC%9D%B4%ED%94%84%EC%82%AC%EC%9D%B4%ED%81%B4lifecycle-%ED%95%A8%EC%88%98%EB%8A%94)
+
 ## 1. VueJS란 무엇인가
 
 Vue.js는 사용자 인터페이스를 만들기 위한 진보적인 프레임워크이다. 핵심 라이브러리는 `뷰 레이어`만 초점을 맞추어, 다른 라이브러리나 기존 프로젝트와의 통합이 쉽다
@@ -470,5 +472,483 @@ Vue.component('todo-tem', {
  </li>
 </ul>
 <span> Total todos count is {{total}}</span>
+```
+
+## 14. 사용자 정의의 input컴포넌트에서 v-model을 사용하는 법은?
+
+사용자 정의 input컴포넌트에서도 `v-model`은 활용할 수 있따. 아래와 같은 규칙을 지키자
+
+1. input의 value를 props를 이용해 바인딩 한다
+
+2. 새로운 값이 입력되는 input이벤트발생 시, 해당 값을 `emit`하여 상위 컴포넌트로 이벤트를 전달한다.
+
+3. 사용 예시
+
+   ```javascript
+   Vue.component('custom-input', {
+       props: ['value'],
+       template: `
+   		<input
+   			v-bind:value="value"
+   			v-on:input="$emit('input',$event.target.value)"
+   		>
+   	`
+   })
+   ```
+
+   ```vue
+   <custom-input v-model="searchInput"></custom-input>
+   ```
+
+위와같이 쉽게 바인딩 할 수 있다
+
+## 15. slots?
+
+부모 컴포넌트에서 자식 컴포넌트에게 html 탬플릿자체를 넘기고 싶을때 이용
+
+```vue
+<template>
+	<!-- 부모 -->
+	<ChildComponent>
+    	<button slot="left">왼쪽 버튼</button>
+        <button slot="right">오른쪽 버튼</button>
+    </ChildComponent>
+</template>
+```
+
+```vue
+<template>
+	<!-- 자식 -->
+	<div>
+        <slot name="left"></slot>
+        <slot name="right"></slot>
+    </div>
+</template>
+```
+
+## 16. Transition
+
+Vue에서는 항목들이 DOM에 추가, 갱신, 삭제될 때, 다양한 방법으로 트랜지션 효과를 입힐 수 있다
+
+1. CSS 트랜지션과 애니메이션을 위한 클래스를 자동으로 적용
+2. Animate.css와 같은 써드파티
+3. 트랜지션 훅 중에 JavaScript를 사용해 DOM 조작
+4. Velocity.js와 같은 애니매이션 라이브러리 통합
+
+## 17. Vue router
+
+Vue의 공식적인 라우팅 라이브러리
+
+`<router-link>`태그로 간단히 이용 가능하고 아니면 직접 push하는 방식도 가능하다
+
+동적 라우팅도 아주 쉽게 가능! 라우팅 우선 순위도 그냥 적는 순서대로 이다.
+
+## 18. 관심사 분리
+
+현대적인 UI 개발에서 코드베이스를 서로 얽혀있는 세 개의 거대한 레이어로 나누는 대신, 느슨하게 결합 된 컴포넌트를 나누고 구성하는 것이 더 중요하다.
+
+싱글 파일 컴포넌트에 대한 아이디어가 마음에 안 들어도 JS, CSS 별도의 파일로 분리하여 핫 리로드 및 사전 컴파일 기능을 활용할 수 있다.
+
+```vue
+<template>
+  <div>This section will be pre-compiled and hot reloaded</div>
+</template>
+<script src="./my-component.js"></script>
+<style src="./my-component.css"></style>
+```
+
+## 19. 싱글 파일 컴포넌트의 필요 이유
+
+1. 전역 정의: 모든 구성 요소에 대해 고유한 이름을 지정하도록 강요
+2. 문자열 템플릿: 구문 강조가 약해 여러 줄로 된 HTML에 보기 안좋은 슬래시가 많이 필요합니다.
+3. CSS 지원 없음: HTML 및 JS가 컴포넌트로 모듈화 되어 있으나 CSS가 빠져 있는 것을 말합니다.
+4. 빌드 단계 없음: Pug 및 Babel과 같은 전처리기가 아닌 HTML 및 ES5 JavaScript로 제한
+
+## 20. filter
+
+텍스트 형식화를 위해 사용됩니다. 이 필터들은 자바스크립트 표현식에 파이프(`|`) 기호와 함께 추가 되어야 한다. 아래와 같은 경우에 사용할 수 있다. 첫 글자를 대문자로 만드는 예도 한번 보자
+
+1. 중괄호 보간법
+2. `v-bind` 표현식
+
+```javascript
+filters: {
+    capitalize: function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+}
+```
+
+이 필터를 중괄호 보간법 또는 v-bind를 이용해 사용할 수 있다
+
+```vue
+{{ username | capitalize }}
+
+<div v-bind:id="username | capitalize"></div>
+```
+
+체이닝도 가능하다 `{{ message | filterA | filterB | .... }}`. 전역적 또는 지역적으로도 생성이 가능하다
+
+1. 지역 필터: 컴포넌트의 옵션에서 정의할 수 있다. 이 경우, 필터는 해당 컴포넌트에서만 사용 가능
+
+   위에 써놨던 것처럼 이용 가능하다
+
+2. 전역 필터: Vue 인스턴스를 만들기 전에 전역적으로 필터를 정의할 수 있다. 이럴 경우 모든 컴포넌트에서 이용 가능
+
+   ```javascript
+   Vue.filter('capitalize', function (value) {
+       if (!value) return ''
+       value = value.toString()
+       return value.charAt(0).toUpperCase() + value.slice(1)
+   })
+   ```
+
+거기다 filter는 기본적으로 함수여서 인자를 전달하는 것도 가능하다. `{{ message | filterA('arg1', arg2) }}`
+
+## 21. 플러그인
+
+플러그인은 일반적으로 전역 수준 기능을 Vue 어플리케이션에 추가합니다
+
+1. 전역 메소드 또는 속성 추가
+2. 하나 이상의 글로벌 에셋 추가
+3. 전역 믹스인으로 컴포넌트 옵션
+4. `Vue.prototype`를 이용해 Vue에 인스턴스 메소드를 추가
+5. 위의 기능과 함께 자체 API를 제공하는 라이브러리(vue-router)
+
+만드는 방법은 플러그인에서 `install`메소드를 정의해야 한다. 이 메소드는 첫 번째 인자로 Vue 생성자와 외부에서 설정 가능한 옵션을 파라미터로 전달 받습니다.
+
+```javascript
+MyPlugin.install = function (Vue, options) {
+    // 1. add global method or property
+    Vue.myGlobalMethod = function () {
+        // 로직 전개
+    }
+    
+    // 2. add a global asset
+    Vue.directive('my-directive', {
+        bind (el, binding, vnode, oldVnode) {
+            // 로직 전개
+        }
+    })
+    
+    // 3. inject some component options
+    Vue.mixin({
+        created: function () {}
+    })
+    
+    // 4. add an instance method
+    Vue.prototype.$myMethod = function (methodOptions) {
+        
+    }
+}
+```
+
+사용하는 방법은 그저 vue.use를 이용하면 된다
+
+```javascript
+Vue.use(MyPlugin)
+
+new Vue({
+    // 옵션 나열
+})
+```
+
+## 22. 믹스인
+
+Mixins는 Vue 컴포넌트에 재사용 가능한 기능을 배포하는 유연한 방법입니다. 믹스인에 존재하는 기능들은 호출된 컴포넌트의 기능들과 합쳐집니다.
+
+mixin 객체는 모든 구성 요소 옵션을 포함할 수 있다. 재사용될 수 있는 created라이프사이클 훅을 가진 믹스인을 예로 작성해보자
+
+```javascript
+const myMixin = {
+  created(){
+    console.log("Welcome to Mixins!")
+  }
+}
+var app = new Vue({
+  el: '#root',
+  mixins: [myMixin]
+})
+```
+
+전역 믹스인도 있다. Vue의 모든 컴포넌트에 영향을 줄 수 있다. 훅을 이용할 때는 조심해야한다
+
+```javascript
+Vue.mixin({
+   created(){
+     console.log("Write global mixins")
+   }
+})
+
+new Vue({
+  el: '#app'
+})
+```
+
+cli환경에서는 `.js`파일로 작성하고 `export`키워드로 내보낸다고 선언해야 한다. 그리고 `import`로 가져올 수가 있다
+
+충돌하는 경우는 다양하다
+
+1. `data`는 재귀적으로 병합하되, 충돌되는 속성은 컴포넌트의 데이터가 우선적으로 병합
+
+   ```javascript
+   var mixin = {
+     data: function () {
+       return {
+         message: 'Hello, this is a Mixin'
+       }
+     }
+    }
+   new Vue({
+     mixins: [mixin],
+     data: function () {
+       return {
+         message: 'Hello, this is a Component'
+       }
+     },
+     created: function () {
+       console.log(this.$data); // => { message: "Hello, this is a Component'" }
+     }
+   })
+   ```
+
+2. 라이프사이클 훅 함수는 믹스인 함수가 먼저 실행되고 컴포넌트 함수가 실행된다.
+
+   ```javascript
+   const myMixin = {
+     created(){
+       console.log("Called from Mixin")
+     }
+   }
+   
+   new Vue({
+     el: '#root',
+     mixins:[myMixin],
+     created(){
+       console.log("Called from Component")
+     }
+   })
+   
+   //Called from Mixin
+   //Called from Component
+   ```
+
+3. `methods`, `components`, `directives`역시 재귀적으로 병합한다. 충돌하는 것이 있을 경우 컴포넌트가 우선권을 갖는다
+
+그런데 병합 방법을 우리가 정의할 수도 있다. `Vue.config.optionMergeStrategied`에 함수를 추가할 필요가 있다. 아니면 Vuex를 이용하는 방법도 있다.
+
+```javascript
+Vue.config.optionMergeStrategies.myOption = function (toVal, fromVal) {
+  // return mergedVal
+}
+
+// vuex이용해보기
+const merge = Vue.config.optionMergeStrategies.computed
+Vue.config.optionMergeStrategies.vuex = function (toVal, fromVal) {
+  if (!toVal) return fromVal
+  if (!fromVal) return toVal
+  return {
+    getters: merge(toVal.getters, fromVal.getters),
+    state: merge(toVal.state, fromVal.state),
+    actions: merge(toVal.actions, fromVal.actions)
+  }
+}
+```
+
+## 23. 사용자 정의 지시자
+
+`v-`로 시작하는 것을 우리가 만들 수도 있다. 기본적으로 DOM 제어하기 위해 직접 접근해야할 필요가 있을 때 유용하게 사용된다. 페이지가 로드될 때 `input`에 자동으로 포커싱되는 사용자 정의 지시자를 전역으로 만들어봅시다.
+
+```javascript
+// Register a global custom directive called 'v-focus'
+Vue.directive('focus', {
+    // When the bound element is inserted into the DOM
+    inserted: function (el) {
+    	// Focus the element
+   		el.focust
+	}
+})
+```
+
+```vue
+<input v-focus>
+```
+
+등록을 할 때는 directives옵션을 이용하면 어렵지 않게 이용이 가능하다. 그리고 지시된 컴포넌트에서만 이용가능하다
+
+```javascript
+directives: {
+    focus: {
+        inserted: function (el) {
+            el.focus()
+        }
+    }
+}
+```
+
+지시자가 제공하는 라이프 사이클 훅은 아래와 같다
+
+1. bind: 지시자가 처음 앨리먼트에 부착될 때 한 번 호출됩니다.
+2. inserted: 지시자가 부착된 앨리먼트가 DOM에 삽입되었을 때 호출
+3. ipdate: 해당 앨리먼트가 업데이트 될 때 호출. 하지만 아직 하위 앨리먼트는 업데이트 되지 않은 상태
+4. componentUpdated: 하위 컴포넌트까지 업데이트 된 상태일 때 호출됩니다.
+5. unbind: 지시자가 엘리먼트에서부터 삭제될 때 호출
+
+전달인자는 다양하게 있고 보통 아래처럼 표현한다
+
+1. el: 해당 지시자가 부착된 앨리먼트로, 이를 이용해 DOM을 조작할 수 있습니다.
+2. binding: 아래의 속성을 가진 객체이다
+   1. name: 지시자의 이름으로, v- 접두사가 제거된 이름
+   2. value: 지시자에서 전달 받은 값. ex) `v-my-directive="1+1"`이라면 2를 전달받는다
+   3. oldValue: 이전 값으로 update와 componentUpdated 훅에서만 사용할 수 있다. 이를 통해 값이 변경되었는지 아닌지 확인 가능
+   4. expression: 문자열로 바인딩된 표현식. ex) `v-my-directive="1+1"`이라면 "1+1"를 전달받는다
+   5. arg: 지시자의 전달인자이다.  ex) `v-my-directive:foo`이라면 foo가 된다
+   6. modifiers: 수식어가 포함된 객체입니다. 만약 `v-my-directive.foo.bar`라면 `{ foo: true, bar: true }`가 됩니다.
+3. vnode: Vue의 컴파일러에 의해 생성된 가상 노드
+4. oldVnode: 이 전의 가상 노드, update와 componentUpdated 훅에서만 사용할 수 있다.
+
+한번에 여러값을 인수받는 것도 가능하다 아래와 같은 대표적인 예
+
+```vue
+<div v-avatar="{ width: 500, height: 400, url: 'path/logo', text: 'Iron Man' }"></div>
+```
+
+```javascript
+Vue.directive('avatar', function (el, binding) {
+  console.log(binding.value.width) // 500
+  console.log(binding.value.height)  // 400
+  console.log(binding.value.url) // path/logo
+  console.log(binding.value.text)  // "Iron Man"
+})
+```
+
+## 24. render 함수
+
+사용하는 이유? 일반적인 경우 HTML을 작성하는 것을 권장한다. 하지만 input이나 slot의 값을 이용해 동적인 컴포넌트가 필요할 경우 JS가 필요하다. 그럴 경우 render 함수를 사용하여 이용할 수가 있다
+
+render함수는 `createElement`라는 함수를 첫번째 인자로 받아 가상 노드를 생성한다. 내부적으로 Vue의 탬플릿은 빌드 타임에서 render함수를 이용해 컴파일하고 있습니다. 아래의 예와 같이 작성이 가능하다.
+
+```vue
+<template>
+ <div :class="{'is-rounded': isRounded}">
+   <p>Welcome to Vue render functions</p>
+ </div>
+</template>
+```
+
+위 탬플릿을 아래와 같이 render함수를 이용해서 만들 수가 있다
+
+```javascript
+render: function (createElement) {
+   return createElement('div', {
+     'class': {
+         'is-rounded': this.isRounded
+     }
+   }, [
+     createElement('p', 'Welcome to Vue render functions')
+   ]);
+  },
+```
+
+그렇다면 `createElement`이 놈은 무엇인가? 몇가지 약속된 전달인자를 받아 탬플릿에 사용되는 기능을 코드로 작성할 수 있게 해주는 놈이다. 이것은 [공식문서](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth)를 읽어볼 수 있도록 하자
+
+그렇다면 가상 노드를 여러번 사용할 수 있을까? 물론 가능하다! 여러번 사용하고 싶다면 팩토리 패턴을 이용해 작성해야 한다. 아래 두 예를 보자. 첫번째는 안되는 예고 두번째 예는 가능한 예이다
+
+```javascript
+render: function (createElement) {
+  var myHeadingVNode = createElement('h1', 'This is a Virtual Node')
+  return createElement('div', [
+    myHeadingVNode, myHeadingVNode, myHeadingVNode
+  ])
+}
+```
+
+```javascript
+render: function (createElement) {
+  return createElement('div',
+    Array.apply(null, { length: 3 }).map(function () {
+      return createElement('h1', 'This is a Virtual Node')
+    })
+  )
+}
+// 이것이 팩토리 패턴이다.
+```
+
+## 25. Vue, React, Angular
+
+1. Vue vs React
+
+   1. 공통점
+
+      1. 둘 다 가상 DOM 모델을 사용한다
+      2. 반응적이고 조합 가능한 컴포넌트를 제공
+      3. 코어 라이브러리에만 집중하고 있고, 라우팅 및 상태 관리와 같은 라이브러리가 부가적으로 존재
+
+   2. 차이점
+
+      | 특징              | Vue                       | React                   |
+      | ----------------- | ------------------------- | ----------------------- |
+      | 타입              | JavaScript MVC 프레임워크 | JavaScript 라이브러리   |
+      | 플랫폼            | 웹을 우선                 | 웹과 네이티브 모두      |
+      | 복잡도            | 상대적으로 간단           | 상대적으로 복잡         |
+      | 빌드 어플리케이션 | Vue-cli                   | CRA(`Create-React-App`) |
+
+   3. Vue가 나은점
+
+      1. 가볍고 빠름
+      2. 템플릿이 있어서 개발 과정을 쉽게 만들어준다
+      3. JSX에 비해 가벼운 JavaScript 문법을 사용
+
+   4. React가 나은 점
+
+      1. 큰 규모의 어플리케이션을 유연하게 제작 가능
+      2. 테스트가 쉬움
+      3. 모바일 앱 제작에도 적합
+      4. 생태계가 크고 풍부
+
+2. Vue vs Angular
+
+   1. 차이점
+
+      | 특징          | Vue                      | AngularJS                                        |
+      | ------------- | ------------------------ | ------------------------------------------------ |
+      | 복잡도        | 배우기 쉬운 API와 디자인 | 프레임워크가 꽤 크고 타입스크립트 등의 지식 필요 |
+      | 데이터 바인딩 | 양방향 바인딩            | 단방향 바인딩                                    |
+      | 초기 릴리즈   | 2014                     | 2016                                             |
+      | 모델          | 가상 DOM 기반            | MVC                                              |
+      | 작성된 언어   | JavaScript               | TypeScript                                       |
+
+## 26. 동적 컴포넌트
+
+동적으로 컴포넌트를 선택해서 받는것도 가능하다. 아래와 같이 해보자. `v-bind:is`를 이용해 동적으로 선택 가능
+
+```vue
+<div id="app">
+   <component v-bind:is="currentPage">
+       <!-- component changes when currentPage changes! -->
+       <!-- output: Home -->
+   </component>
+</div>
+
+<script>
+export default {
+    data() {
+    	return {currentPage: 'home'}
+    },
+    components: {
+        home: {
+            template: "<p>Home</p>"
+        },
+        about: {
+          template: "<p>About</p>"
+        },
+        contact: {
+          template: "<p>Contact</p>"
+        }
+  	}
+}
+</script>
 ```
 
