@@ -1,0 +1,80 @@
+# http 상태 코드
+
+- 400 bad request
+  - 잘못된 문법으로 인하여 서버가 요청을 이해 못함
+- 401 unauthorized
+  - 인증 자격 없음
+- 402 payment required
+  - 결제 시스템에 사용하기 위하여 만들어졌지만 지금 사용되고 있지 않음
+- 403 forbidden
+  - 클라이언트가 콘텐츠에 접근할 권리가 없다
+- 404 not found
+  - 요청받은 리소스를 찾을 수 ㅇ벗음. 알려지지 않은 url
+- 405 mothod not allowed
+  - 요청한 메서드를 이용할 수 없다
+- 406 not acceptable
+  - 정해준 규격에 따른 어떠한 콘텐츠도 찾지 않을시 에러
+- 407 proxy Aythentication required
+  - 401과 비슷. 프록시에 의해 완료된 인증 필요
+- 408 request timeout
+  - 요청을 한지 시간이 오래 된 상황
+- 409 conflict
+  - 서버의 상태와 충돌
+- 410 gone
+  - 콘텐츠가 서버에서 영구적으로 삭제되었으며, 전달해 줄 수 있는 주소 역시 존재하지 ㅇ낳다
+- 411 length requred
+  - content-length 헤더 필드가 정의되지 않은 요청이 들어왔을 때
+- 412 orecibdutuib fauked
+  - 클라이언트의 헤더 조건이 서버 조건과 적절하지 않음
+- 413 payload too large
+  - 요청 엔티티가 서버에서 정의한 한계보다 큼
+- 414  URI Too long
+  - 클라이언트가 요청한 uri는 서버에서 처리하지 않기로 한 길이보다 길다
+- 415  Unsypported media type
+  - 요청한 미디어 포맷은 서버에서 지원안함
+- 416 Requested Range Not Satisfiable
+  - Range 헤더 필드에 요청한 지정 범위를 만족시킬 수 없음
+- 417 expectation failed
+  - expect 요청 헤더 필드로 요청한 예상이 서버에서는 적당하지 않음
+- 418 i'm a teapot
+  - 서버는 커피를 찻 주전자에 끓이는 것을 거절함
+- 421 misdirected request
+  - 서버로 유도된 요청은 응답을 생성할 수 없다
+- 422 unprocessable entity
+  - 요청은 잘 만들어졌지만 문법 오류로 인하여 따를 수 없습니다
+- 423 locked
+  - 리소스는 접근하는 것이 잠겨있다
+- 424 failed dependency
+  - 이전 요청이 실패해서 지금 요청도 실패
+- 426 upgrade required
+  - 지금은 요청을 처리하는 것을 거절했지만 다른 프로토콜로 업그레이드 하면 처리할 수도 있음
+- 428 precondition required
+  - 오리진 서버는 요청이 조건적이어야 합니다.
+- 429 too many requests
+  - 사용자가 지정된 시간에 너무 많은 요청을 보냈습니다
+- 431 request header fields too large
+  - 요청한 헤더 필드가 너무 크기 때문에 서버는 요청을 처리하지 ㅇ낳을 것이다
+- 451 unavailable for legal reasons
+  - 정부에 의해 검열됨
+- 500 internal server error
+  - 서버가 처리 방법을 모름
+- 501 not omplemented
+  - 요청 방법은 서버에서 지원되지 않으므로 처리할 수 없다
+- 502 bad gateway
+  - 이 오류 응답은 서버가 요청을 처리하는 데 필요한 응답을 얻기 위해 게이트웨이로 작업하는 동안 잘못된 응답을 수신했음을 의미합니다.
+- 503 service unavailable
+  - 서버가 요청을 처리할 준비가 되지 않았다
+- 504 gateway timeout
+  - 적시에 응답을 받을 수 없을 때 주어짐
+- 505 http version not supported
+  - 요청에 사용된 http 버전은 서버에서 지원되지 않습니다.
+- 506 variabnt also negotiates
+  - 서버에 내부 구성 오류가 있다
+- 507 insufficient storage
+  - 서버에 내부 구성 오류가 있다
+- 508 loop detected
+  - 서버가 요청을 처리하는 동안 무한 루프를 감지
+- 510 not extended
+  - 서버가 요청을 이행하려면 요청에 대한 추가 확장 필요
+- 511 network authentication required
+  - 인증이 필요
