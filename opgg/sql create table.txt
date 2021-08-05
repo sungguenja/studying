@@ -1,0 +1,9 @@
+create table user (
+	pk int primary key not null auto_increment,
+    token varchar(30) not null,
+    firebase_token varchar(30),
+    gender int,
+    age int,
+    image_address varchar(30),
+    nickname varchar(30)
+);
