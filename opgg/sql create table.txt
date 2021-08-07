@@ -1,9 +1,28 @@
 create table user (
-	pk int primary key not null auto_increment,
+    pk int primary key not null auto_increment,
     token varchar(30) not null,
     firebase_token varchar(30),
     gender int,
     age int,
     image_address varchar(30),
     nickname varchar(30)
+);
+
+create table room (
+  pk int primary key auto_increment not null,
+  room_name varchar(32) not null,
+  game_name varchar(32) not null,
+  people_number int not null,
+  start_date datetime not null,
+  voice_chat boolean not null,
+  lowest_tier int,
+  highest_tier int
+);
+
+create table roomuser (
+    pk int primary key auto_increment not null,
+    user_pk int not null,
+    room_pk int not null,
+    is_leader boolean not null,
+    foreign key (user_pk) references user(pk)
 );
