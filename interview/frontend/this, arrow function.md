@@ -26,6 +26,11 @@ const testObj = {
         },
         test3: () => {
             console.log(this,this.name);
+        },
+        test4: function () {
+            (() => {
+                console.log(this,this.name);
+            })();
         }
     }
 }
