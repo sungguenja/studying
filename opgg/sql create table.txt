@@ -16,7 +16,8 @@ create table room (
   start_date datetime not null,
   voice_chat boolean not null,
   lowest_tier int,
-  highest_tier int
+  highest_tier int,
+  is_start int
 );
 
 create table roomuser (
