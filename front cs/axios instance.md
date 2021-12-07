@@ -86,3 +86,10 @@ export const getRequest = (넣을것) => {
 ## 4. 결론
 
 간단하게 만들고 이용할 수 있다는 장점이 있다. 또한 해당 방식을 이용한다면 필요한 요청을 보낼 백엔드 서버마다 axios 인스턴스를 따로 지정해서 요청을 보낼 모듈을 만들기도 매우 쉬울 수도 있다. 필요시에 적당히 이용해볼 수 있도록 하자!
+
+## 참고자료
+
+- [LEVEL UP](https://pinokio0702.tistory.com/373)
+- [axios-http.com](https://axios-http.com/kr/docs/instance)
+- [axios 러닝 가이드](https://yamoo9.github.io/axios/guide/api.html#http-%EB%A9%94%EC%84%9C%EB%93%9C-%EB%B3%84%EC%B9%AD)
+- [asYouSay 블로그](https://as-you-say.tistory.com/240)
