@@ -16,6 +16,74 @@
   3. 2번 유저는 서버에게 인증을 받고 1번 유저와 연결할 수 있도록 도움
   4. 1,2번 유저는 서로 연결된다
   5. profit
+- signaling을 순서대로 하면 아래와 같다
+  - ![](rtc.png)
+
+### connection 만들기
+
+> Peer A와 B를 나눴지만 사실 같은 코드 안에 있어야함을 알자
+> 어차피 프론트는 나눠 받는게 아니다 (되나?)
+
+```javascript
+// Peer A의 일
+// socket
+socket.on("welcome", async () => {
+  const offer = await myPeerConnection.createOffer();
+  myPeerConnection.setLocalDescription(offer);
+  socket.emit("offer", offer, roomName);
+});
+
+socket.on("answer", async (answer) => {
+  myPeerConnection.setRemoteDescription(answer);
+});
+
+// rtc
+function makeConnection() {
+  myPeerConnection = new RTCPeerConnection();
+  // STUN 서버가 없으면 필요하다고 뜰 것이다.
+  myPeerConnection.addEventListener("icecandidate", handleIce);
+  myPeerConnection.addEventListener("addstream", handleAddStream);
+  myStream
+    .getTracks()
+    .forEach((track) => myPeerConnection.addTrack(track, myStream));
+}
+
+function handleIce(data) {
+  socket.emit("icecandidate", date.dandidate, roomName);
+}
+
+function handleAddStream(data) {
+  // 상대방에 대한 정보가 들어온다
+  // 데이터로 하고 싶은 것을 진행하면 된다
+}
+```
+
+> server가 할 일
+>
+> offer 신호를 듣고 offer과 방정보를 받는다 =>
+> 해당 방에 offer 이벤트를 전달시키면서 offer 데이터를 전달
+>
+> answer 신호를 듣고 answer과 방정보를 받는다 =>
+> 해당 방에 answer 이벤트를 전달시키며 answer 데이터를 전달
+>
+> icecandidate 신호를 듣고 candidate와 방정보를 받는다 =>
+> 해당 방에 icecandidate 이벤트를 전달시키며 candidate 데이터를 전달
+
+```javascript
+// Peer B의 일
+socket.on("offer", async (offer) => {
+  // 도착할 때 myPeerConnection이 아직 없을 수도 있다.
+  // 이것을 방지하기 위해서는 방참가를 서버에 알리기 전에 peerConnection을 먼저 만드는 방식을 해야한다. (코드마다 다를 것이니 인지하고 있자)
+  myPeerConnection.setRemoteDescription(offer);
+  const answer = myPeerConnection.createAnswer();
+  myPeerConnection.setLocalDescription(answer);
+  socket.emit("answer", answer, rooName);
+});
+
+socket.on("icecandidate", (ice) => {
+  myPeerConnection.addIceCandidate(ice);
+});
+```
 
 ## user video and other actions
 
