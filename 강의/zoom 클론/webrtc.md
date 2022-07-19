@@ -85,6 +85,32 @@ socket.on("icecandidate", (ice) => {
 });
 ```
 
+## STUN 서버
+
+> 어떤 것을 request받으면 누군지 특정하는 서버
+>
+> 그리고 특정지어서 피어 커넥션을 만든다.
+>
+> 구글에서 제공하는 스턴서버를 사용해도 된다.
+>
+> 하지만 직접 공부해서 만들어볼 생각을 하자
+
+```javascript
+function makeConnection() {
+  myPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {urls: [
+        "stun:stun.l.google.com:19302",
+        "stun:stun1.l.google.com:19302".
+        "stun:stun2.l.google.com:19302".
+        "stun:stun2.l.google.com:19302".
+        "stun:stun3.l.google.com:19302"
+      ]}
+    ]
+  })
+}
+```
+
 ## user video and other actions
 
 [참고 mdn 문서](https://developer.mozilla.org/ko/docs/Web/API/MediaDevices/getUserMedia)
@@ -157,6 +183,19 @@ cameraBtn.addEventListener("click", handleCameraClick);
       try {
         myStream = await navigator.mediaDevices.getUserMedia(deviceId ? cameraConstraints : initialConstrains);
         MyFace.srcObjects = myStream;
+      }
+    }
+    ```
+  - 값이 바뀌면 peerConnection에 연결된 기기의 ID를 바꾼다 [참고문서](https://developer.mozilla.org/en-US/docs/Web/API/RTCRtpSender)
+  - ```javascript
+    async function handleCameraChange() {
+      await getMedia(camerasSelect.value);
+      if (myPeerConnection) {
+        const videoTrack = myStream.getVideoTracks()[0];
+        const videoSender = myPeerConnection
+          .getSenders()
+          .find((sender) => sender.track.kind === "video");
+        videoSender.replaceTrack(videoTrack);
       }
     }
     ```
